@@ -1,0 +1,17 @@
+tags:
+  name: Check role user
+  description: Checking role user where login in app
+/checkuser:
+  get:
+    summary: List role user
+    tags: [Check role user]
+    responses:
+      200:
+        description: List user
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                role:
+                  type: string

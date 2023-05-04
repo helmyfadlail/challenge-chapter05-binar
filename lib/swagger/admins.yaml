@@ -1,0 +1,114 @@
+components:
+  schemas:
+    Admins:
+      type: object
+      properties:
+        name:
+          type: string
+          description: to know who admin update the apps
+        email:
+          type: string
+          description: the email who can login and register
+        password:
+          type: string
+          description: password for registration
+
+tags:
+  name: Admin
+  description: The admin managing API
+/admin/login:
+  post:
+    summary: login to admin account
+    tags: [Admin]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+              password:
+                type: string
+    responses:
+      200:
+        description: Login admin.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      500:
+        description: Some server error
+
+/superadmin/create/admin:
+  post:
+    summary: Create a new admin account
+    tags: [Admin]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Admins"
+    responses:
+      200:
+        description: Create admin.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Admins"
+      500:
+        description: Some server error
+
+/superadmin/create/admin/{id}:
+  put:
+    summary: Update admin by id
+    tags: [Admin]
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: The admin id
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Admins"
+    responses:
+      200:
+        description: The admin was successfully updated
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Admins"
+      404:
+        description: The admin was not found
+      500:
+        description: Some error happened
+
+  delete:
+    summary: Delete the admin by id
+    tags: [Admin]
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: The admin id
+    responses:
+      200:
+        description: The admin was successfully removed
+      404:
+        description: The admin was not found
+      500:
+        description: Some error happened

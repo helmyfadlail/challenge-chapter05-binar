@@ -2,17 +2,17 @@ const { member } = require("../models");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const secret = process.env.SECRET_KEY;
-const response = require("./response");
+const response = require("../components/response.js");
 
 const register = async (req, res) => {
-  const { email, password } = req.body;
+  const { username, phone, email, password } = req.body;
   try {
-    const checkAdmin = await member.findOne({ where: { email } });
+    const checkAdmin = await member.findOne({ where: { email, username } });
     if (checkAdmin) return response(res, 400, "failed", "Admin already exists");
 
     const hashPassword = await bcrypt.hash(password, 10);
-    await member.create({ email, password: hashPassword }).then((user) => {
-      response(res, 200, "success", "successfully created a new member", user);
+    await member.create({ username, phone, email, password: hashPassword }).then((user) => {
+      response(res, 200, "success", "Successfully created a new member", user);
     });
   } catch (error) {
     response(res, 404, "failed", error.message);

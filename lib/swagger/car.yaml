@@ -1,0 +1,124 @@
+components:
+  schemas:
+    Cars:
+      type: object
+      properties:
+        name:
+          type: string
+          description: the title of cars
+        rentPrice:
+          type: integer
+          description: rent price the cars
+        image:
+          type: string
+          description: drawings to describe the specific shape of the car
+          format: binary
+        isDeleted:
+          type: boolean
+          description: to find out if the car has been removed
+        createdBy:
+          type: string
+          description: to find out who created the car
+        updatedBy:
+          type: string
+          description: to find out who updated the car
+        deletedBy:
+          type: string
+          description: to find out who deleted the car
+
+tags:
+  name: Car
+  description: The car managing API
+/car:
+  get:
+    summary: Lists all the cars
+    tags: [Car]
+    responses:
+      200:
+        description: The list of the cars
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/Cars"
+
+  post:
+    summary: Create a new car
+    tags: [Car]
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              rentPrice:
+                type: integer
+              image:
+                type: string
+                format: binary
+    responses:
+      200:
+        description: The created car.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Cars"
+      500:
+        description: Some server error
+
+/car/{id}:
+  put:
+    summary: Update the car by the id
+    tags: [Car]
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: The car id
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              rentPrice:
+                type: integer
+              image:
+                type: string
+                format: binary
+    responses:
+      200:
+        description: The car was updated
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Cars"
+      404:
+        description: The car was not found
+      500:
+        description: Some error happened
+
+  delete:
+    summary: Remove the car by id
+    tags: [Car]
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: The car id
+    responses:
+      200:
+        description: The car was deleted
+      404:
+        description: The car was not found

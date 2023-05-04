@@ -2,7 +2,7 @@ const { superadmin } = require("../models");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const secret = process.env.SECRET_KEY;
-const response = require("./response");
+const response = require("../components/response.js");
 
 const login = async (req, res) => {
   const { email, password } = req.body;

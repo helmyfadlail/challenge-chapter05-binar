@@ -1,0 +1,34 @@
+components:
+  schemas:
+    Superadmins:
+      type: object
+      properties:
+        email:
+          type: string
+          description: the email who can login and register
+        password:
+          type: string
+          description: password for registration
+
+tags:
+  name: Superadmin
+  description: The superadmin managing API
+/superadmin/login:
+  post:
+    summary: Login to superadmin account
+    tags: [Superadmin]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Superadmins"
+    responses:
+      200:
+        description: Login superadmin.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Superadmins"
+      500:
+        description: Some server error

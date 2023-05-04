@@ -2,17 +2,17 @@ const { admin } = require("../models");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const secret = process.env.SECRET_KEY;
-const response = require("./response");
+const response = require("../components/response.js");
 
 const createAdmin = async (req, res) => {
-  const { email, password } = req.body;
+  const { name, email, password } = req.body;
   try {
-    await admin.findOne({ where: { email } }).then((user) => {
+    await admin.findOne({ where: { email, name } }).then((user) => {
       if (user) return response(res, 400, "failed", "Admin already exists");
     });
     const hashPassword = await bcrypt.hash(password, 10);
     await admin.create({ email, password: hashPassword }).then((user) => {
-      response(res, 200, "success", "successfully created a new admin", user);
+      response(res, 200, "success", "Successfully created a new admin", user);
     });
   } catch (error) {
     response(res, 404, "failed", error.message);
@@ -20,16 +20,16 @@ const createAdmin = async (req, res) => {
 };
 
 const updateAdmin = async (req, res) => {
-  const { email, password } = req.body;
+  const { name, email, password } = req.body;
   const id = req.params.id;
-  const findEmailAdmin = admin.findOne({ where: { email } });
-  if (findEmailAdmin === email) {
+  const findAdmin = await admin.findOne({ where: { id } });
+  if (findAdmin.email === email || findAdmin.name === name) {
     return response(res, 400, "failed", "Admin already exists");
   } else {
     try {
       const hashPassword = await bcrypt.hash(password, 10);
-      await admin.update({ email, password: hashPassword }, { where: { id } }).then(() => {
-        response(res, 200, "success", `car with id ${id} has been updated successfully`);
+      await admin.update({ name, email, password: hashPassword }, { where: { id } }).then(() => {
+        response(res, 200, "success", `Car with id ${id} has been updated successfully`);
       });
     } catch (error) {
       response(res, 400, "failed", error.message);
@@ -42,7 +42,7 @@ const deleteAdmin = async (req, res) => {
 
   try {
     await admin.destroy({ where: { id } }).then(() => {
-      response(res, 200, "success", `admin with id ${id} has been deleted successfully`);
+      response(res, 200, "success", `Admin with id ${id} has been deleted successfully`);
     });
   } catch (error) {
     response(res, 400, "failed", error.message);

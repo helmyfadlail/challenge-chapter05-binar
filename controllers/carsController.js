@@ -1,11 +1,11 @@
 const { uploadToImagekit } = require("../lib/imageKit");
 const { car } = require("../models");
-const response = require("./response");
+const response = require("../components/response.js");
 
 const getAllCars = async (req, res) => {
   try {
     await car.findAll({ where: { isDeleted: false } }).then((cars) => {
-      response(res, 200, "success", "success get all cars", cars);
+      response(res, 200, "success", "Success get all cars", cars);
     });
   } catch (error) {
     response(res, 404, "failed", error.message);
@@ -15,20 +15,19 @@ const getAllCars = async (req, res) => {
 const createCar = async (req, res) => {
   const { name, rentPrice } = req.body;
   const createdBy = req.user.email;
-  let img = "";
 
   if (req.file === undefined && name === undefined && rentPrice === undefined) {
-    return response(res, 400, "failed", "Please enter the relevant data");
+    return response(res, 400, "failed", "Please input relevant data");
   } else {
-    img = await uploadToImagekit(req);
-  }
+    const img = await uploadToImagekit(req);
 
-  try {
-    await car.create({ name, rentPrice, image: img.url, createdBy: createdBy }).then((car) => {
-      response(res, 200, "success", "successfully created a car", car);
-    });
-  } catch (error) {
-    response(res, 400, "failed", error.message);
+    try {
+      await car.create({ name, rentPrice, image: img.url, createdBy: createdBy }).then((car) => {
+        response(res, 200, "success", "Successfully created a car", car);
+      });
+    } catch (error) {
+      response(res, 400, "failed", error.message);
+    }
   }
 };
 
@@ -50,11 +49,11 @@ const updateCar = async (req, res) => {
   }
 
   if (!findCar) {
-    response(res, 404, "failed", `car with id ${id} not found`);
+    response(res, 404, "failed", `Car with id ${id} not found`);
   } else {
     try {
       await car.update({ name, rentPrice, image: updateImage, updatedBy: updatedBy }, { where: { id } }).then(() => {
-        response(res, 200, "success", `car with id ${id} has been updated successfully`);
+        response(res, 200, "success", `Car with id ${id} has been updated successfully`);
       });
     } catch (error) {
       response(res, 400, "failed", error.message);
@@ -69,7 +68,7 @@ const deleteCar = async (req, res) => {
 
   try {
     await car.update({ isDeleted: true, deletedBy: deletedBy }, { where: { id } }).then(() => {
-      response(res, 200, "success", `car with id ${id} has been deleted successfully`);
+      response(res, 200, "success", `Car with id ${id} has been deleted successfully`);
     });
   } catch (error) {
     response(res, 400, "failed", error.message);

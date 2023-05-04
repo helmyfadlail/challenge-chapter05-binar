@@ -1,10 +1,11 @@
 const express = require("express");
-const upload = require("../middleware/uploader.js");
 const carsController = require("../controllers/carsController.js");
 const superAdminController = require("../controllers/superAdminController.js");
 const adminController = require("../controllers/adminController.js");
 const memberController = require("../controllers/memberController.js");
-const { verifyUser, isSuperadmin, isAdminOrSuperadmin, checkCurrentUser } = require("../middleware/auth.js");
+const authController = require("../controllers/authController.js");
+const { verifyUser, isSuperadmin, isAdminOrSuperadmin } = require("../middleware/auth.js");
+const upload = require("../middleware/uploader.js");
 
 const router = express.Router();
 
@@ -27,7 +28,7 @@ router.post("/admin/login", adminController.login);
 router.post("/member/register", memberController.register);
 router.post("/member/login", memberController.login);
 
-// check current user routes
-router.get("/checkuser", verifyUser, checkCurrentUser);
+// check current user
+router.get("/checkuser", verifyUser, authController.checkCurrentUser);
 
 module.exports = router;

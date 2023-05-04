@@ -1,0 +1,70 @@
+components:
+  schemas:
+    Members:
+      type: object
+      properties:
+        username:
+          type: string
+          description: username account
+        email:
+          type: string
+          description: the email who can login and register
+        phone:
+          type: string
+          description: phone number user
+        password:
+          type: string
+          description: password for registration
+
+tags:
+  name: Member
+  description: The member managing API
+/member/login:
+  post:
+    summary: Login to member account
+    tags: [Member]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+              password:
+                type: string
+    responses:
+      200:
+        description: Login member.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      500:
+        description: Some server error
+
+/member/register:
+  post:
+    summary: Create a new account member
+    tags: [Member]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Members"
+    responses:
+      200:
+        description: Register member.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Members"
+      500:
+        description: Some server error
