@@ -23,7 +23,7 @@ const createCar = async (req, res) => {
 
     try {
       await car.create({ name, rentPrice, image: img.url, createdBy: createdBy }).then((car) => {
-        response(res, 200, "success", "Successfully created a car", car);
+        response(res, 201, "success", "Successfully created a car", car);
       });
     } catch (error) {
       response(res, 400, "failed", error.message);
@@ -53,7 +53,7 @@ const updateCar = async (req, res) => {
   } else {
     try {
       await car.update({ name, rentPrice, image: updateImage, updatedBy: updatedBy }, { where: { id } }).then(() => {
-        response(res, 200, "success", `Car with id ${id} has been updated successfully`);
+        response(res, 201, "success", `Car with id ${id} has been updated successfully`);
       });
     } catch (error) {
       response(res, 400, "failed", error.message);
@@ -68,7 +68,7 @@ const deleteCar = async (req, res) => {
 
   try {
     await car.update({ isDeleted: true, deletedBy: deletedBy }, { where: { id } }).then(() => {
-      response(res, 200, "success", `Car with id ${id} has been deleted successfully`);
+      response(res, 201, "success", `Car with id ${id} has been deleted successfully`);
     });
   } catch (error) {
     response(res, 400, "failed", error.message);

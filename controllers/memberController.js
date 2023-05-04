@@ -12,7 +12,7 @@ const register = async (req, res) => {
 
     const hashPassword = await bcrypt.hash(password, 10);
     await member.create({ username, phone, email, password: hashPassword }).then((user) => {
-      response(res, 200, "success", "Successfully created a new member", user);
+      response(res, 201, "success", "Successfully created a new member", user);
     });
   } catch (error) {
     response(res, 404, "failed", error.message);

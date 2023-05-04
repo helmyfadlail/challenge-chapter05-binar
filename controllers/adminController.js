@@ -12,7 +12,7 @@ const createAdmin = async (req, res) => {
     });
     const hashPassword = await bcrypt.hash(password, 10);
     await admin.create({ email, password: hashPassword }).then((user) => {
-      response(res, 200, "success", "Successfully created a new admin", user);
+      response(res, 201, "success", "Successfully created a new admin", user);
     });
   } catch (error) {
     response(res, 404, "failed", error.message);
@@ -29,7 +29,7 @@ const updateAdmin = async (req, res) => {
     try {
       const hashPassword = await bcrypt.hash(password, 10);
       await admin.update({ name, email, password: hashPassword }, { where: { id } }).then(() => {
-        response(res, 200, "success", `Car with id ${id} has been updated successfully`);
+        response(res, 201, "success", `Car with id ${id} has been updated successfully`);
       });
     } catch (error) {
       response(res, 400, "failed", error.message);
@@ -42,7 +42,7 @@ const deleteAdmin = async (req, res) => {
 
   try {
     await admin.destroy({ where: { id } }).then(() => {
-      response(res, 200, "success", `Admin with id ${id} has been deleted successfully`);
+      response(res, 201, "success", `Admin with id ${id} has been deleted successfully`);
     });
   } catch (error) {
     response(res, 400, "failed", error.message);
